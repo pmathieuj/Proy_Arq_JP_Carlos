@@ -72,12 +72,12 @@ hist(Join$Sales,
 #Algoritmo 4 Ganancias de tienda por Fabricante
 
 Filtro4 <- as.data.frame( Join %>% 
-                            group_by(`Country of Origin`) %>%        # Agrupamos por folio
+                            group_by(Country) %>%        # Agrupamos por folio
                             summarise(venta = sum(Sales)             # Sumamos venta
                             ))
 
 
-etiquetas <- paste0(Filtro4$`Country of Origin`, " - $" ,Filtro4$venta, " = ", round(100 * Filtro4$venta/sum(Filtro4$venta), 2), "%")
+etiquetas <- paste0(Filtro4$Country, " - $" ,Filtro4$venta, " = ", round(100 * Filtro4$venta/sum(Filtro4$venta), 2), "%")
 
 pie(Filtro4$venta, 
     labels = etiquetas,
@@ -89,16 +89,16 @@ pie(Filtro4$venta,
 #Algoritmo 5 Cantidad de Carros Vendidos por Fabricante
 
 Filtro5.1 <- as.data.frame( Join %>% 
-                              group_by(`Country of Origin`) %>%        # Agrupamos por folio
+                              group_by(Country) %>%        # Agrupamos por folio
                               summarise(CantidadGanancia = sum(Sales)             # Sumamos venta
                               ))
 
 Filtro5.2 <- as.data.frame( Join %>% 
-                              group_by(`Country of Origin`) %>%        # Agrupamos por folio
+                              group_by(Country) %>%        # Agrupamos por folio
                               summarise(CantidadVentas = sum(Amount)             # Sumamos venta
                               ))
 
-Filtro5.3 <-  merge(x = Filtro5.1, y = Filtro5.2, by = "Country of Origin" )
+Filtro5.3 <-  merge(x = Filtro5.1, y = Filtro5.2, by = "Country" )
 
 arrange(Filtro5.3, CantidadVentas)
 
@@ -106,11 +106,11 @@ barplot(Filtro5.3$CantidadVentas,
         main = "Cantidad de Carros Vendidos por Fabricante",
         xlab = "Fabricante", ylab = "Unidades Vendidas",
         col = c("red"),
-        names = Filtro5.3$`Country of Origin`)
+        names = Filtro5.3$Country)
 
 Plot5 = function(Pais){
-  barplot(Filtro5.3[Filtro5.3$`Country of Origin` == Pais,]$CantidadVentas,
-          Filtro5.3[Filtro5.3$`Country of Origin` == Pais,]$CantidadGanancia,
+  barplot(Filtro5.3[Filtro5.3$Country == Pais,]$CantidadVentas,
+          Filtro5.3[Filtro5.3$Country == Pais,]$CantidadGanancia,
           main = "Cantidad de Carros Vendidos por Fabricante",
           xlab = "Fabricante", ylab = "Unidades Vendidas",
           col = c("red"),
@@ -119,7 +119,7 @@ Plot5 = function(Pais){
 
 Plot5("Japan")
 
-distinct(Join, `Country of Origin`) # Lista Paises
+distinct(Join, Country) # Lista Paises
 
 
 
